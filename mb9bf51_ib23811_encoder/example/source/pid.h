@@ -51,10 +51,12 @@
 #define SP_DEF_D         0          
 
 #define IQ_DEF_P         230            // PID coefficients
+//#define IQ_DEF_P         100            // PID coefficients
 #define IQ_DEF_I         5     
 #define IQ_DEF_D         0              
 
 #define ID_DEF_P         230            // PID coefficients
+//#define ID_DEF_P         100            // PID coefficients
 #define ID_DEF_I         5  
 #define ID_DEF_D         0               
 

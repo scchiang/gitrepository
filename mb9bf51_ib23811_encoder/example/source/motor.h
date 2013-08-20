@@ -47,7 +47,8 @@
 #define ZS_ISQ_MAX 500          // value used for zero search forced commutation
 //#define ZS_ISQ_INCR 500           // value used for zero search forced commutation
 #define ZS_ISQ_INCR 50           // value used for zero search forced commutation
-#define ZS_INCR_DELAY 2          // delay between two angle steps during zero search
+// SC#define ZS_INCR_DELAY 2          // delay between two angle steps during zero search
+#define ZS_INCR_DELAY 3          // delay between two angle steps during zero search
 
 
 #define ZERO_SPEED_THRESHOLD 20   // speed below this RPM will be measured as zero; this can stabilize the loops

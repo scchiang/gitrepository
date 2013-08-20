@@ -74,7 +74,7 @@ void clarke_fwd()
 void clarke_fwd()
 {
     act_system_currents.alpha = act_system_currents.u;
-    act_system_currents.beta = (int32_t)(       (int64_t)(    (((act_system_currents.u + 2 * act_system_currents.v) * ONE_OVER_SQRT3_Q15) >> 15)));
+    act_system_currents.beta = (int32_t)( (int64_t)((((act_system_currents.u + 2 * act_system_currents.v) * ONE_OVER_SQRT3_Q15) >> 15)));
 }
 */
 //*****************************************************************************
