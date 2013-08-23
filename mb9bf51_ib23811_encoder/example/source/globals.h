@@ -59,6 +59,7 @@ void wait(uint32_t ms);
 
 #define CURRENT_SCALE 1              // 32 scale from ADC value to Q15 format
 #define PWM_MAX_VAL 0x3ff         // compare clear value for frt0; @32MHz PLL: pwm freq.=32MHz/(2*PWM_MAX_VAL) (up/down), e.g. 0x03ff = ca. 15kHz
+// #define PWM_MAX_VAL 0x3ff         // compare clear value for frt0; @32MHz PLL: pwm freq.=32MHz/(2*PWM_MAX_VAL) (up/down), e.g. 0x03ff = ca. 15kHz
 #define MAX_DUTY (PWM_MAX_VAL-5) // can be used to limit duty cycle (should not be higher than PWM_MAX_VAL)
                                   // this can be necessary depending on the circuit, to ensure bootstrap reload or ADC sampling
 #define MIN_DEADTIME 0x001f       //1f minimum reload

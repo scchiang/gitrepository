@@ -164,6 +164,8 @@ void pid_control_iq (int32_t ctrl_error)
     // PID Regulator
     tmp_output_p = (int32_t)(       (long long)(  (pid_params_iq.p * ctrl_error)>>15)  );
     tmp_output_i = (int32_t)(       (long long)(  (pid_params_iq.i * pid_params_iq.error_sum)>>15)  );
+//    tmp_output_p = (int32_t)(       (long long)(  (pid_params_iq.p * ctrl_error)>>12)  );
+//    tmp_output_i = (int32_t)(       (long long)(  (pid_params_iq.i * pid_params_iq.error_sum)>>12)  );
     tmp_output_d = 0;                   
     
     tmp_output_iq =  pid_params_iq.last_output + (tmp_output_p + tmp_output_i + tmp_output_d);
@@ -194,6 +196,7 @@ void pid_control_iq (int32_t ctrl_error)
     pid_params_iq.counter = tmp_output_iq;
         
     des_system_voltages.q = output_iq;
+//    des_system_voltages.q = 1000;
 }
 
 //*****************************************************************************
@@ -220,8 +223,10 @@ void pid_control_id (int32_t ctrl_error)
         pid_params_id.error_sum = tmp_output_error_sum;    
     
     // PID Regulator
-    tmp_output_p = (int32_t)(       (long long)(    (pid_params_id.p * ctrl_error)>>15)       );
-    tmp_output_i = (int32_t)(       (long long)(    (pid_params_id.i * pid_params_id.error_sum)>>15)        );
+//    tmp_output_p = (int32_t)(       (long long)(    (pid_params_id.p * ctrl_error)>>15)       );
+// sc    tmp_output_i = (int32_t)(       (long long)(    (pid_params_id.i * pid_params_id.error_sum)>>15)        );
+    tmp_output_p = (int32_t)(       (long long)(    (pid_params_id.p * ctrl_error)>>12)       );
+    tmp_output_i = (int32_t)(       (long long)(    (pid_params_id.i * pid_params_id.error_sum)>>12) );
     tmp_output_d = 0; 
     
     tmp_output_id =  pid_params_id.last_output + ((tmp_output_p + tmp_output_i + tmp_output_d));
@@ -252,6 +257,7 @@ void pid_control_id (int32_t ctrl_error)
     
     pid_params_id.counter = tmp_output_id;
     des_system_voltages.d = output_id;
+//    des_system_voltages.d = 0;
 
 }
 

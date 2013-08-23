@@ -159,6 +159,15 @@ void MFT_FRT_IRQHandler(void)
         helper_phase_a = FM3_MFT1_OCU->OCCP1;
         helper_phase_b = FM3_MFT1_OCU->OCCP3;
         helper_phase_c = FM3_MFT1_OCU->OCCP5;
+
+/*
+        if (helper_phase_a > PWM_MAX_VAL)
+          helper_phase_a = 1023;
+        if (helper_phase_b > PWM_MAX_VAL)
+          helper_phase_b = 1023;
+        if (helper_phase_c > PWM_MAX_VAL)
+          helper_phase_c = 1023;
+*/
         // debug
        // printf ("phas a b c %d, %d, %d,\n", helper_phase_a, helper_phase_b, helper_phase_c);
         if ((helper_phase_a < 0)|(helper_phase_b < 0)|(helper_phase_c < 0))

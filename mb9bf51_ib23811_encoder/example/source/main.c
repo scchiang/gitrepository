@@ -90,6 +90,7 @@ volatile int8_t    dir = FORWARD;
 volatile int8_t    motor_state = STOPPED;
 volatile int16_t   rotor_angle;
 volatile int8_t    modtype = INV_CLARKE;//SVM;//                // SVM or INV_CLARKE
+//volatile int8_t    modtype = SVM;//                // SVM or INV_CLARKE
 volatile int16_t   act_rpm = 0;
 volatile int16_t   abs_rpm = 0;
 volatile int16_t   desired_rpm = 0; 

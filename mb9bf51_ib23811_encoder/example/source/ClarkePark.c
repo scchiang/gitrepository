@@ -159,8 +159,8 @@ void park_inv()
   
     //printf (" %d, %d, %d,\n", rotor_angle_helper, SinCalc, CosCalc);  
     
-   des_system_voltages.alpha = (int32_t)(       (int64_t)(   ((des_system_voltages.d * CosCalc) - (des_system_voltages.q * SinCalc))>>12));
-   des_system_voltages.beta  = (int32_t)(       (int64_t)(   ((des_system_voltages.d * SinCalc) + (des_system_voltages.q * CosCalc))>>12));
+   des_system_voltages.alpha = (int32_t)((int64_t)(   ((des_system_voltages.d * CosCalc) - (des_system_voltages.q * SinCalc))>>12));
+   des_system_voltages.beta  = (int32_t)((int64_t)(   ((des_system_voltages.d * SinCalc) + (des_system_voltages.q * CosCalc))>>12));
 //    ref_voltages.alpha = (long)(((ref_voltages.v_d * CosAngle) - (ref_voltages.v_q * SinAngle))>>12);
 //   ref_voltages.beta  = (long)(((ref_voltages.v_d * SinAngle) + (ref_voltages.v_q * CosAngle))>>12);
 }
