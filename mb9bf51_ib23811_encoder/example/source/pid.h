@@ -43,22 +43,22 @@
 #define ADC_SP_REG_INTERVAL 1           // run speed loop every n adc (current loop) cycles
 
 #define DEF_Iq_MAX 500                  // upper limit for iq limit
-//#define DEF_Vq_MAX 28000
-#define DEF_Vq_MAX 18000
-//#define DEF_Vd_MAX 15000
-#define DEF_Vd_MAX 10000
+#define DEF_Vq_MAX 28000
+//#define DEF_Vq_MAX 18000
+#define DEF_Vd_MAX 15000
+//#define DEF_Vd_MAX 10000
 
 #define SP_DEF_P         6000            // PID coefficients
 #define SP_DEF_I         30         
 #define SP_DEF_D         0          
 
-//#define IQ_DEF_P         230            // PID coefficients
-#define IQ_DEF_P         100            // PID coefficients
+#define IQ_DEF_P         230            // PID coefficients
+//#define IQ_DEF_P         100            // PID coefficients
 #define IQ_DEF_I         5     
 #define IQ_DEF_D         0              
 
-//#define ID_DEF_P         230            // PID coefficients
-#define ID_DEF_P         100            // PID coefficients
+#define ID_DEF_P         230            // PID coefficients
+//#define ID_DEF_P         100            // PID coefficients
 #define ID_DEF_I         5  
 #define ID_DEF_D         0               
 

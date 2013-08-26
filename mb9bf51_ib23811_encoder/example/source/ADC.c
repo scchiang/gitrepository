@@ -155,15 +155,16 @@ void ADC0_IRQHandler(void)
     int32_t adcval0 = (FM3_ADC0->SCFDH);                  // Readout the FIFO for channel 0;
     int32_t adcval1 = (FM3_ADC1->SCFDH);                  // Readout the FIFO for channel 1
     //PotiVal = FM3_ADC2->SCFDH;
+    //PotiVal = FM3_ADC2->SCFDH;
      
     act_system_currents.u = ((adcval0 - phase_current_offset_a));  // Current scale to get more accuracy 12bit shift 
     act_system_currents.v = ((adcval1 - phase_current_offset_b));  // of motor (and through the shunt) is negative
     act_system_currents.w = (-act_system_currents.u - act_system_currents.v);   //Not used in the firmware
 
 
-    clarke_fwd();
-    park_fwd();
-    act_rpm = calc_rpm();                                        // calculate actual speed 
+    clarke_fwd();  // from act u,v,w calculate alpha and beta
+    park_fwd();    //  from act alpha beta and current angle (encoder line) calculate act d and q 
+    act_rpm = calc_rpm();   // calculate actual speed 
 
     //Limit measurement faults
     if (act_rpm > MAX_RPM)
