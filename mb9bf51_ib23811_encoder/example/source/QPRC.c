@@ -75,13 +75,13 @@ void EncoderZeroSearch(void)
         wait(20);
     }
 //    while (1){  
-    for (fixed_angle = 0 ; fixed_angle < 8192 ;  (fixed_angle+=3))   
-//    for (fixed_angle = 0 ; fixed_angle < ENCODER_LINES ;  fixed_angle++)   
-      {                               
-         // wait(ZS_INCR_DELAY);
-         wait(1);
-      }
-//      }
+        for (fixed_angle = 0 ; fixed_angle < 8192 ;  (fixed_angle+= 1))   
+        //for (fixed_angle = 0 ; fixed_angle < ENCODER_LINES ;  fixed_angle++)   
+          {                               
+             // wait(ZS_INCR_DELAY);
+             wait(1);
+          }
+//    }
     bFM3_QPRC0_QCR_PSTP = 1;                    // Stop QPRC
     FM3_QPRC0->QPCR = 0;                        // Delete counter value
     bFM3_QPRC0_QCR_PSTP = 0;                    // Start QPRC    

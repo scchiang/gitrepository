@@ -36,15 +36,15 @@
 #define MIN_RPM 200
 //#define POLEPAIRS 4
 
-#define POLEPAIRS 3 // for testing MCG motor
+#define POLEPAIRS 2 // for testing MCG motor
 
 
 // #define ENCODER_LINES 125        // number of lines per electrical round
-#define ENCODER_LINES 2731        // number of lines per electrical round
+#define ENCODER_LINES 4096        // number of lines per electrical round
 #define ENCODER_COUNTS (ENCODER_LINES * POLEPAIRS)-1 // Pulses per Round = lines per round x2 pulses per line x2 channels
 
 //#define ZS_ISQ_MAX 5000           // value used for zero search forced commutation
-#define ZS_ISQ_MAX 500          // value used for zero search forced commutation
+#define ZS_ISQ_MAX 3500          // value used for zero search forced commutation
 //#define ZS_ISQ_INCR 500           // value used for zero search forced commutation
 #define ZS_ISQ_INCR 50           // value used for zero search forced commutation
 // SC#define ZS_INCR_DELAY 2          // delay between two angle steps during zero search

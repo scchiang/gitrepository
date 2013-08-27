@@ -112,7 +112,12 @@ void park_fwd()
 
     get_rotor_angle();
  
-    rotor_angle_helper = rotor_angle >> 2; 
+    if (rotor_angle > 4095 )
+      rotor_angle_helper = (rotor_angle -4095) >> 1;
+    else
+      rotor_angle_helper = rotor_angle >> 1; 
+
+//     rotor_angle_helper = rotor_angle >> 2; 
 //    int16_t SinCalc = sin_tableQ15[rotor_angle];
 //    int16_t CosCalc = cos_tableQ15[rotor_angle];
     int16_t SinCalc = sin_tableQ15[rotor_angle_helper];
@@ -143,7 +148,12 @@ void park_inv()
     if (motor_state == ENC_INIT)
     {
         // rotor_angle_helper = fixed_angle;
-        rotor_angle_helper = fixed_angle >>2; // SC map into 2048 table
+    if (rotor_angle > 4095 )
+      rotor_angle_helper = (rotor_angle -4095) >> 1;
+    else
+      rotor_angle_helper = rotor_angle >> 1; 
+  
+//       rotor_angle_helper = fixed_angle >>2; // SC map into 2048 table
         des_system_voltages.d = 0;
         des_system_voltages.q = startup_ampl;     // fixed ref. voltage during startup (no regulator active)
     }        
@@ -151,7 +161,12 @@ void park_inv()
     else
     {
         //rotor_angle_helper = rotor_angle;       
-        rotor_angle_helper = rotor_angle >>2;       // sc map into 2048 table
+    if (rotor_angle > 4095 )
+      rotor_angle_helper = (rotor_angle -4095) >> 1;
+    else
+      rotor_angle_helper = rotor_angle >> 1; 
+
+// sc     rotor_angle_helper = rotor_angle >>2;       // sc map into 2048 table
     }
     
     SinCalc = sin_tableQ15[rotor_angle_helper];

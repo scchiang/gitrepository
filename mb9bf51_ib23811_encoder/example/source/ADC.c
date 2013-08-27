@@ -184,7 +184,7 @@ void ADC0_IRQHandler(void)
     
             desired_rpm_tmp = desired_rpm;
             temp_speed_error = -(desired_rpm_tmp - act_rpm);//speed_average.average);             
-            pid_control_sp (temp_speed_error);
+//            pid_control_sp (temp_speed_error);
             adc_cycle_count = 0;                                     // clear counter
         }
                   

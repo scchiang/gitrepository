@@ -132,12 +132,13 @@ int32_t main(void)
  //   FM3_GPIO->PDOR1 = 0xA400;  //2
     StopMotor();                        // Stop motor
     wait (200);
-    poti_rpm = 300;
-//    poti_rpm = 140;
+//    poti_rpm = 400;
+    poti_rpm = 140;
     ref_input.d = 0;                    // no field wakening
     
     EncoderZeroSearch();                // Calibrate the motor
     start_motor(FORWARD);
+//    start_motor(BACKWARD);
         
     while(1) 
     {   // **************************** MAIN LOOP ************************************************
