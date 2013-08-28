@@ -135,8 +135,8 @@ void pid_control_sp (int32_t ctrl_error)
     pid_params_sp.e_n0 = ctrl_error;              // Store error
     
     pid_params_sp.counter = tmp_output_sp;
- //   ref_input.q = output_sp;//checkerSpeed; //
-      ref_input.q = 600;//checkerSpeed; //
+    ref_input.q = output_sp;//checkerSpeed; //
+//      ref_input.q = 600;//checkerSpeed; //
 }
 
 //*****************************************************************************
@@ -196,8 +196,8 @@ void pid_control_iq (int32_t ctrl_error)
     
     pid_params_iq.counter = tmp_output_iq;
         
-//    des_system_voltages.q = output_iq;
-    des_system_voltages.q = 4000;
+    des_system_voltages.q = output_iq;
+//    des_system_voltages.q = 2000;
 }
 
 //*****************************************************************************
@@ -257,8 +257,8 @@ void pid_control_id (int32_t ctrl_error)
     pid_params_id.e_n0 = ctrl_error;              // Store error
     
     pid_params_id.counter = tmp_output_id;
-//    des_system_voltages.d = output_id;
-    des_system_voltages.d = 0;
+    des_system_voltages.d = output_id;
+//    des_system_voltages.d = 0;
 
 }
 

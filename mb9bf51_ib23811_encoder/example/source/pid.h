@@ -44,9 +44,9 @@
 
 #define DEF_Iq_MAX 4000                  // upper limit for iq limit
 //#define DEF_Vq_MAX 28000
-#define DEF_Vq_MAX 2500
+#define DEF_Vq_MAX 3500
 //#define DEF_Vd_MAX 15000
-#define DEF_Vd_MAX 3000
+#define DEF_Vd_MAX 2000
 
 #define SP_DEF_P         6000            // PID coefficients
 #define SP_DEF_I         30         

@@ -158,6 +158,7 @@ short int calc_rpm(void)
     bt0val32 = (high << 16) | low;
 
     if (bFM3_QPRC0_QICR_DIRPC == 0) 
+//    if (bFM3_QPRC0_QICR_DIRPC == 1) 
         act_dir = FORWARD;
     else 
         act_dir = BACKWARD;

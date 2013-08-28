@@ -137,8 +137,8 @@ int32_t main(void)
     ref_input.d = 0;                    // no field wakening
     
     EncoderZeroSearch();                // Calibrate the motor
-    start_motor(FORWARD);
-//    start_motor(BACKWARD);
+//    start_motor(FORWARD);
+    start_motor(BACKWARD);
         
     while(1) 
     {   // **************************** MAIN LOOP ************************************************
