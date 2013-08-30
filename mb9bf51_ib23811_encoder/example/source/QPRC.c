@@ -50,6 +50,7 @@ void initQPRC(void)
     FM3_GPIO->EPFR09 |= 0x05;               // AIN0_0, BIN0_0 used for QPRC unit 0
     
     FM3_QPRC0->QCRL = 0x0a;                 // no Swap AB, Phase difference count mode (x4), RC Mode 2
+//    FM3_QPRC0->QCRL = 0x02;                 // the QPCR count up Swap AB, Phase difference count mode (x4), RC Mode 2
     // 00 00 10 10 swap, rsel, cgsc,pstp, rcm1,rcm0, pcm1, pcm0 
     FM3_QPRC0->QCRH = 0x3c;                 // ZIN disable, AIN + BIN rising + falling edge select
     // 00 11 11 00 Z rise fall B reise A rise fall PCRM1 PCRM0  high byte
@@ -78,7 +79,9 @@ void EncoderZeroSearch(void)
         for (fixed_angle = 0 ; fixed_angle < 8192 ;  (fixed_angle+= 1))   
         //for (fixed_angle = 0 ; fixed_angle < ENCODER_LINES ;  fixed_angle++)   
           {                               
-             // wait(ZS_INCR_DELAY);
+//            get_rotor_angle();
+//            calc_rpm();
+            // wait(ZS_INCR_DELAY);
              wait(1);
           }
 //    }
@@ -157,13 +160,15 @@ short int calc_rpm(void)
     high = FM3_BT1_PWC->DTBF;
     bt0val32 = (high << 16) | low;
 
-    if (bFM3_QPRC0_QICR_DIRPC == 0) 
-//    if (bFM3_QPRC0_QICR_DIRPC == 1) 
+//    if (bFM3_QPRC0_QICR_DIRPC == 0) 
+    if (bFM3_QPRC0_QICR_DIRPC == 1) 
         act_dir = FORWARD;
     else 
         act_dir = BACKWARD;
 
     rpm = (BT0COUNTCLOCK * 60 / (ENCODER_LINES * POLEPAIRS)) / bt0val32  ;
+
+    //printf ("rpm %d \n", rpm);
   
     if (rpm < ZERO_SPEED_THRESHOLD) 
         rpm = 0;  // this can stabilize the speed loop in pos. mode

@@ -80,7 +80,7 @@ void INT0_7_Handler(void)
     if(bFM3_INTREQ_IRQ04MON_EXTINT0==1)
     {
       //Button 2 pressed
-      if (poti_rpm > 150)
+      //if (poti_rpm > 150)
         poti_rpm=poti_rpm-30;
           
     }
