@@ -96,7 +96,7 @@ volatile int16_t   abs_rpm = 0;
 volatile int16_t   desired_rpm = 0; 
 volatile int16_t   fixed_angle;
 uint8_t position_mode = 0;
-int64_t desired_position = 0, abs_position = 0;
+int64_t desired_position = 2000, abs_position = 0;
 
 pid_params_t pid_params_id;
 pid_params_t pid_params_iq;
@@ -105,11 +105,13 @@ pid_params_t pid_params_sp;
 statsys_rotsys_variables_t act_system_currents;
 statsys_rotsys_variables_t des_system_voltages;
 rotsys_current_t ref_input;
+int32_t deb_array[2048][7];
+
 
 
 int32_t main(void)
 {
-    SysTick_Config(80000000/1000);      // 1000ticks (1000us) per interrupt @80MHz
+    SysTick_Config(144000000/1000);      // 1000ticks (1000us) per interrupt @80MHz
         
     printf("program start \n");
     initAdc0();                         // initialize ADC1 (12-bit, current measurement)
@@ -122,18 +124,11 @@ int32_t main(void)
     initExtInterrupt();
     initEnable();                       // Enable interrupts
 
- //   FM3_GPIO->ADE  = 0x00FF; // No Analog Inputs
- //   FM3_GPIO->DDR1 = 0xFF00;  // P18-P1F: LED-SEG1 output
- //   FM3_GPIO->DDR3 = 0xFF00;  // P38-P3F: LED-SEG2 output
-   
- //   FM3_GPIO->PFR1 = 0x0000;  // P10-P1F: LED-SEG1 GPIO
- //   FM3_GPIO->PFR3 = 0x0000;  // P30-P3F: LED-SEG2 GPIO
-  
- //   FM3_GPIO->PDOR1 = 0xA400;  //2
     StopMotor();                        // Stop motor
-    wait (200);
+    wait (20);
 //    poti_rpm = 400;
-    poti_rpm = 140;
+//    poti_rpm = 140;
+    poti_rpm = 0;
     ref_input.d = 0;                    // no field wakening
     
     EncoderZeroSearch();                // Calibrate the motor

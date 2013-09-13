@@ -164,7 +164,7 @@ void ADC0_IRQHandler(void)
 
     clarke_fwd();  // from act u,v,w calculate alpha and beta
     park_fwd();    //  from act alpha beta and current angle (encoder line) calculate act d and q 
-    act_rpm = calc_rpm();   // calculate actual speed 
+//    act_rpm = calc_rpm();   // calculate actual speed 
 
     //Limit measurement faults
     if (act_rpm > MAX_RPM)
@@ -176,20 +176,29 @@ void ADC0_IRQHandler(void)
     {
         if (++adc_cycle_count >= ADC_SP_REG_INTERVAL) 
         { 
-            if (position_mode) 
+//            if (position_mode) 
             {
                 abs_position = get_abs_position();
-                desired_rpm = reg_pos(desired_position, abs_position);
+                ref_input.q = reg_pos(desired_position, abs_position);
             }
     
+/*
             desired_rpm_tmp = desired_rpm;
             temp_speed_error = -(desired_rpm_tmp - act_rpm);//speed_average.average);             
             pid_control_sp (temp_speed_error);
             adc_cycle_count = 0;                                     // clear counter
+*/
         }
-                  
-        pid_control_id ((ref_input.d - act_system_currents.d)); // calculate actual Id error 
-        pid_control_iq ((ref_input.q - act_system_currents.q)); // calculate actual Iq error
+        if (ref_input.q ==0)
+        {
+          des_system_voltages.d = 0;
+          des_system_voltages.q = 0;
+        }
+        else
+        {
+          pid_control_id ((ref_input.d - act_system_currents.d)); // calculate actual Id error 
+          pid_control_iq ((ref_input.q - act_system_currents.q)); // calculate actual Iq error
+        }
     } // if (motor_state >= STARTING)
 
     

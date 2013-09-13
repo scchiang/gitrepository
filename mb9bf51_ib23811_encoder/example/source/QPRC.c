@@ -76,15 +76,17 @@ void EncoderZeroSearch(void)
         wait(20);
     }
 //    while (1){  
-        for (fixed_angle = 0 ; fixed_angle < 8192 ;  (fixed_angle+= 1))   
+        for (fixed_angle = 0 ; fixed_angle < 4096 ;  (fixed_angle+= 1))   
         //for (fixed_angle = 0 ; fixed_angle < ENCODER_LINES ;  fixed_angle++)   
           {                               
 //            get_rotor_angle();
 //            calc_rpm();
-            // wait(ZS_INCR_DELAY);
-             wait(1);
+             wait(ZS_INCR_DELAY);
+             //wait(1);
           }
 //    }
+    des_system_voltages.d = 0;
+    des_system_voltages.q = startup_ampl;
     bFM3_QPRC0_QCR_PSTP = 1;                    // Stop QPRC
     FM3_QPRC0->QPCR = 0;                        // Delete counter value
     bFM3_QPRC0_QCR_PSTP = 0;                    // Start QPRC    
@@ -127,21 +129,26 @@ signed long int get_abs_position (void)
     unsigned short int pos_cnt;
     unsigned char cnt;
   
-    pos_cnt = FM3_QPRC0->QRCR;
-    rev_cnt = FM3_QPRC0->QPCR;
+//    pos_cnt = FM3_QPRC0->QRCR;
+//    rev_cnt = FM3_QPRC0->QPCR;
+    pos_cnt = FM3_QPRC0->QPCR;
+    rev_cnt = FM3_QPRC0->QRCR;
     rev_cnt_rr = FM3_QPRC0->QRCR;
     
     if (rev_cnt != rev_cnt_rr) 
     {
         cnt = 3;
-        do {
+        do 
+        {
             rev_cnt = FM3_QPRC0->QRCR;
             pos_cnt = FM3_QPRC0->QPCR;
             rev_cnt_rr = FM3_QPRC0->QRCR;
             qprc_ctmm++;
-            } while ((--cnt) && (rev_cnt != rev_cnt_rr));
+        } 
+        while ((--cnt) && (rev_cnt != rev_cnt_rr));
     if (cnt == 0) qprc_ctmm_nc++;
     }
+
     abs_pos = ((signed long int)rev_cnt * ENCODER_COUNTS) + pos_cnt;
   
     return abs_pos;
@@ -160,8 +167,8 @@ short int calc_rpm(void)
     high = FM3_BT1_PWC->DTBF;
     bt0val32 = (high << 16) | low;
 
-//    if (bFM3_QPRC0_QICR_DIRPC == 0) 
-    if (bFM3_QPRC0_QICR_DIRPC == 1) 
+    if (bFM3_QPRC0_QICR_DIRPC == 0) 
+//    if (bFM3_QPRC0_QICR_DIRPC == 1) 
         act_dir = FORWARD;
     else 
         act_dir = BACKWARD;

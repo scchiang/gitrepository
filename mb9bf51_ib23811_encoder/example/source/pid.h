@@ -31,7 +31,8 @@
 /* (V1.5)                                                               */
 /************************************************************************/
 
-#define POS_KP_DEF 25000                // PID coefficients (conventional form) for position loop
+//#define POS_KP_DEF 25000                // PID coefficients (conventional form) for position loop
+#define POS_KP_DEF 15000                // PID coefficients (conventional form) for position loop
 #define POS_KI_DEF 0                    // PID coefficients (conventional form) for position loop
 #define POS_KD_DEF 0                    // PID coefficients (conventional form) for position loop
 
@@ -39,6 +40,7 @@
 #define POS_ANTIHUNT_THRESHOLD1 36      // liniear position loop gain reduction below this position error
 #define POS_ANTIHUNT_THRESHOLD2 2       // position loop gain = 0 below this position error
 #define SP_REF_MAX_INCREMENT 50
+#define POS_REF_MAX_INCREMENT 50
 
 #define ADC_SP_REG_INTERVAL 1           // run speed loop every n adc (current loop) cycles
 
@@ -52,11 +54,11 @@
 #define SP_DEF_I         30         
 #define SP_DEF_D         5          
 
-#define IQ_DEF_P         230            // PID coefficients
+#define IQ_DEF_P         200            // PID coefficients
 //#define IQ_DEF_P         100            // PID coefficients
-#define IQ_DEF_I         5     
+#define IQ_DEF_I         50     
 // sc #define IQ_DEF_D         0              
-#define IQ_DEF_D         5              
+#define IQ_DEF_D         20              
 
 #define ID_DEF_P         230            // PID coefficients
 //#define ID_DEF_P         100            // PID coefficients

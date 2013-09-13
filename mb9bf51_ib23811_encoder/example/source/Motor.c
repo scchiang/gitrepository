@@ -45,7 +45,7 @@ uint16_t startup_speed_ramp = 0;
 //*****************************************************************************
 void StopMotor (void)
 {
-    desired_rpm = 30;
+    desired_rpm = 0;
     motor_state = STOPPING;
     startup_speed_ramp = 0;                        // stop possible startup speed ramping
     //while (motor_state != STOPPED) //__wait_nop();   // wait until motor has stopped
@@ -76,9 +76,46 @@ void start_motor(signed char direction) {
 void hprio_sched1(void)
 {   
    int poti = poti_rpm; 
-
    
    
+   
+    if (act_dir == FORWARD) 
+    {
+        abs_rpm = act_rpm;
+    }
+    else 
+    {
+        abs_rpm = (-act_rpm);
+    }
+  
+    
+    if (motor_state == RUNNING) 
+    {
+        //desired_rpm  = poti * dir;                // if motor is running, use poti value as speed setpoint
+    }
+    else if (motor_state == STARTING) 
+    {
+        if ((abs_rpm >= poti) || (startup_speed_ramp >= poti))                        // when desired speed is reached
+        {
+            motor_state = RUNNING;                     // set 'running' state
+            startup_speed_ramp = 0;                    // stop ramping speed up
+        }
+        else 
+        {
+            desired_rpm = startup_speed_ramp * dir;    // use speed from startup ramper at beginning
+        }
+    }
+  
+    else if (motor_state == STOPPING) 
+    {
+        if (abs_rpm < 100) 
+        {
+            motor_state = STOPPED;
+            desired_rpm = 0;
+        }
+    }
+   
+/*   
     if (act_dir == FORWARD) 
     {
         abs_rpm = act_rpm;
@@ -114,6 +151,7 @@ void hprio_sched1(void)
             desired_rpm = 0;
         }
     }
+*/
 }
 
 

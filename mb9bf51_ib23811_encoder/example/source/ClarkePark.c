@@ -148,14 +148,14 @@ void park_inv()
     if (motor_state == ENC_INIT)
     {
         // rotor_angle_helper = fixed_angle;
-    if (rotor_angle > 4095 )
-      rotor_angle_helper = (rotor_angle -4095) >> 1;
+    if (fixed_angle > 4095 )
+      rotor_angle_helper = (fixed_angle -4095) >> 1;
     else
-      rotor_angle_helper = rotor_angle >> 1; 
+      rotor_angle_helper = fixed_angle >> 1; 
   
 //       rotor_angle_helper = fixed_angle >>2; // SC map into 2048 table
-        des_system_voltages.d = 0;
-        des_system_voltages.q = startup_ampl;     // fixed ref. voltage during startup (no regulator active)
+        des_system_voltages.q = 0;
+        des_system_voltages.d = startup_ampl;     // fixed ref. voltage during startup (no regulator active)
     }        
     
     else

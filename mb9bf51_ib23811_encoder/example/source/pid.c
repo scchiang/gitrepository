@@ -151,9 +151,11 @@ void pid_control_iq (int32_t ctrl_error)
     int32_t tmp_output_i;
     int32_t tmp_output_d;
     int32_t tmp_output_error_sum;
+    int32_t tmp_output_error_dev;
         
     //tmp_output_error_sum = pid_params_iq.error_sum + ctrl_error;         // The error is only updated if the control-error is not limited
     tmp_output_error_sum = ctrl_error + pid_params_iq.e_n0 + pid_params_iq.e_n1; 
+    tmp_output_error_dev = ctrl_error - pid_params_iq.e_n0; 
     
     // Anti Windup effekt
     if (tmp_output_error_sum > pid_params_iq.limit_output) 
@@ -164,13 +166,13 @@ void pid_control_iq (int32_t ctrl_error)
         pid_params_iq.error_sum = tmp_output_error_sum;    
     
     // PID Regulator
-    tmp_output_p = (int32_t)( (long long)(  (pid_params_iq.p * ctrl_error)>>15));
-    tmp_output_i = (int32_t)( (long long)(  (pid_params_iq.i * pid_params_iq.error_sum)>>15));
+    tmp_output_p = (int32_t)( (long long)(  (pid_params_iq.p * ctrl_error)>>12));
+    tmp_output_i = (int32_t)( (long long)(  (pid_params_iq.i * pid_params_iq.error_sum)>>12));
+    tmp_output_d = (int32_t)( (long long)(  (pid_params_iq.d * tmp_output_error_dev)>>12));                   
 //    tmp_output_p = (int32_t)((long long)(  (pid_params_iq.p * ctrl_error)>>12) );
 //    tmp_output_i = (int32_t)((long long)(  (pid_params_iq.i * pid_params_iq.error_sum)>>12) );
 //    tmp_output_d = 0;                   
-    tmp_output_d = (int32_t)( (long long)(  (pid_params_iq.d * pid_params_iq.error_sum)>>15));                   
-    
+   
     tmp_output_iq =  pid_params_iq.last_output + (tmp_output_p + tmp_output_i + tmp_output_d);
         
     // Limit the output of the PID Regulator
@@ -213,9 +215,11 @@ void pid_control_id (int32_t ctrl_error)
     int32_t tmp_output_i;
     int32_t tmp_output_d;
     int32_t tmp_output_error_sum;
+    int32_t tmp_output_error_dev;
     
     tmp_output_error_sum = pid_params_id.error_sum + ctrl_error;         // The error is only updated if the control-error is not limited
     tmp_output_error_sum = ctrl_error + pid_params_id.e_n0 + pid_params_id.e_n1; 
+    tmp_output_error_dev = ctrl_error - pid_params_id.e_n0; 
     
     // Anti Windup effekt
     if (tmp_output_error_sum > pid_params_id.limit_output) 
@@ -226,12 +230,12 @@ void pid_control_id (int32_t ctrl_error)
         pid_params_id.error_sum = tmp_output_error_sum;    
     
     // PID Regulator
-    tmp_output_p = (int32_t)( (long long)( (pid_params_id.p * ctrl_error)>>15));
-    tmp_output_i = (int32_t)( (long long)( (pid_params_id.i * pid_params_id.error_sum)>>15));
+    tmp_output_p = (int32_t)( (long long)( (pid_params_id.p * ctrl_error)>>12));
+    tmp_output_i = (int32_t)( (long long)( (pid_params_id.i * pid_params_id.error_sum)>>12));
 //    tmp_output_p = (int32_t)(       (long long)( (pid_params_id.p * ctrl_error)>>12) );
 //    tmp_output_i = (int32_t)(       (long long)( (pid_params_id.i * pid_params_id.error_sum)>>12) );
 //    tmp_output_d = 0; 
-    tmp_output_d = (int32_t)( (long long)( (pid_params_id.d * pid_params_id.error_sum)>>15));
+    tmp_output_d = (int32_t)( (long long)( (pid_params_id.d * tmp_output_error_dev)>>12));
  
     
     tmp_output_id =  pid_params_id.last_output + ((tmp_output_p + tmp_output_i + tmp_output_d));
@@ -270,56 +274,63 @@ void pid_control_id (int32_t ctrl_error)
 //*****************************************************************************
 //  Regulator for position-mode
 //*****************************************************************************
-signed short int reg_pos(signed long int des_pos, signed long int act_pos) {
-  signed long int reg_out_val, reg_pos_error;
-  static signed long int reg_out_val_old;
-  static int reg_out_val_I[4];
-  static int reg_out_val_loop;
-  signed int kp_eff, dyn_sp_max;
-  unsigned long int abs_pos_error;
-  
-  reg_pos_error=(des_pos-act_pos);                                 // calculate actual speed error
-  if (reg_pos_error < 0) abs_pos_error = -reg_pos_error;
-  else abs_pos_error = reg_pos_error;
+signed short int reg_pos(signed long int des_pos, signed long int act_pos)
+{
+    signed long int reg_out_val, reg_pos_error;
+    static signed long int reg_out_val_old;
+    static int reg_out_val_I[4];
+    static int reg_out_val_loop;
+    signed int kp_eff, dyn_sp_max;
+    unsigned long int abs_pos_error;
+    
+    reg_pos_error=(des_pos-act_pos);                                 // calculate actual speed error
+    if (reg_pos_error < 0)
+      abs_pos_error = -reg_pos_error;
+    else 
+      abs_pos_error = reg_pos_error;
 
-  if (abs_pos_error < POS_ANTIHUNT_THRESHOLD2) {
-    kp_eff = 0;
-  }
-  else if (abs_pos_error < POS_ANTIHUNT_THRESHOLD1) {
-    kp_eff = pos_kp * (abs_pos_error - POS_ANTIHUNT_THRESHOLD2) / (POS_ANTIHUNT_THRESHOLD1 - POS_ANTIHUNT_THRESHOLD2);
-  }
-  else {
-    kp_eff=pos_kp;
-  }
+    if (abs_pos_error < POS_ANTIHUNT_THRESHOLD2) 
+    {
+      kp_eff = 0;
+    }
+    else if (abs_pos_error < POS_ANTIHUNT_THRESHOLD1) 
+    {
+      kp_eff = pos_kp * (abs_pos_error - POS_ANTIHUNT_THRESHOLD2) / (POS_ANTIHUNT_THRESHOLD1 - POS_ANTIHUNT_THRESHOLD2);
+    }
+    else 
+    {
+      kp_eff=pos_kp;
+    }
+/*
+    if (reg_pos_error > 6000) reg_pos_error = 6000;           // saturate error to avoid overflow
+    else if (reg_pos_error < -6000) reg_pos_error = -6000;    // speed cannot rise beyond max_rpm or sp_max anyway...
+*/
+    reg_out_val = (reg_pos_error*kp_eff)/32768;           // calculate proportional term
+    
+    if (reg_out_val > (reg_out_val_old + POS_REF_MAX_INCREMENT))
+        reg_out_val = reg_out_val + POS_REF_MAX_INCREMENT;
+         
+    if (reg_out_val < (reg_out_val_old - POS_REF_MAX_INCREMENT))
+        reg_out_val = reg_out_val - POS_REF_MAX_INCREMENT;
 
-  if (reg_pos_error > 6000) reg_pos_error = 6000;           // saturate error to avoid overflow
-  else if (reg_pos_error < -6000) reg_pos_error = -6000;    // speed cannot rise beyond max_rpm or sp_max anyway...
-
-  reg_out_val = (reg_pos_error*kp_eff)/32768;           // calculate proportional term
-  
-  if (reg_out_val > (reg_out_val_old + SP_REF_MAX_INCREMENT))
-      reg_out_val = reg_out_val + SP_REF_MAX_INCREMENT;
-       
-  if (reg_out_val < (reg_out_val_old - SP_REF_MAX_INCREMENT))
-      reg_out_val = reg_out_val - SP_REF_MAX_INCREMENT;
-
-  // if (abs_pos_error < 4*MAX_RPM) dyn_sp_max = abs_pos_error/4;
-  // else dyn_sp_max = sp_max;
-  dyn_sp_max = sp_max;
-  
-  if (reg_out_val < (-dyn_sp_max)) {reg_out_val = (-dyn_sp_max);} // do not add up error when output reaches the upper or lower limit
-  if (reg_out_val > dyn_sp_max) {reg_out_val = dyn_sp_max;}
-  
-  reg_out_val_loop = reg_out_val_loop + 1;
-  if (reg_out_val_loop == 3)
-      reg_out_val_loop = 0;
-  
-  reg_out_val_I [reg_out_val_loop] = reg_out_val;
-  
-  reg_out_val = (reg_out_val / 2) + ((reg_out_val_I [0] + reg_out_val_I [1] + reg_out_val_I [2])/6);
-  
-  reg_out_val_old = reg_out_val;
-  return (signed short int) reg_out_val;
+    // if (abs_pos_error < 4*MAX_RPM) dyn_sp_max = abs_pos_error/4;
+    // else dyn_sp_max = sp_max;
+ /*
+    dyn_sp_max = sp_max;
+    
+    if (reg_out_val < (-dyn_sp_max)) {reg_out_val = (-dyn_sp_max);} // do not add up error when output reaches the upper or lower limit
+    if (reg_out_val > dyn_sp_max) {reg_out_val = dyn_sp_max;}
+*/    
+    reg_out_val_loop = reg_out_val_loop + 1;
+    if (reg_out_val_loop == 3)
+        reg_out_val_loop = 0;
+    
+    reg_out_val_I [reg_out_val_loop] = reg_out_val;
+    
+    reg_out_val = (reg_out_val / 2) + ((reg_out_val_I [0] + reg_out_val_I [1] + reg_out_val_I [2])/6);
+    
+    reg_out_val_old = reg_out_val;
+    return (signed short int) reg_out_val;
 }
 
 

@@ -142,8 +142,8 @@ void MFT_FRT_IRQHandler(void)
     
     else if (motor_state == ENC_INIT)                    // forced rotation to search for zero index at startup
     {  
-        des_system_voltages.d = 0;
-        des_system_voltages.q = startup_ampl;       // fixed ref. voltage during startup (no regulator active)
+        des_system_voltages.q = 0;
+        des_system_voltages.d = startup_ampl;       // fixed ref. voltage during startup (no regulator active)
         park_inv();
     }
 
